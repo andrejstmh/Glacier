@@ -25,7 +25,7 @@ the acceleration of gravity and H is the resting depth of the fluid."""
 import time
 import numpy as np
 import matplotlib.pyplot as plt
-import viz_tools
+
 
 # ==================================================================================
 # ================================ Parameter stuff =================================
@@ -39,12 +39,12 @@ f_0 = 1E-4              # Fixed part ofcoriolis parameter [1/s]
 beta = 2E-11            # gradient of coriolis parameter [1/ms]
 rho_0 = 1024.0          # Density of fluid [kg/m^3)]
 tau_0 = 0.1             # Amplitude of wind stress [kg/ms^2]
-use_coriolis = True     # True if you want coriolis force
-use_friction = False     # True if you want bottom friction
+use_coriolis = False     # True if you want coriolis force
+use_friction = True     # True if you want bottom friction
 use_wind = False        # True if you want wind stress
-use_beta = True         # True if you want variation in coriolis
-use_source = False       # True if you want mass source into the domain
-use_sink = False       # True if you want mass sink out of the domain
+use_beta = False         # True if you want variation in coriolis
+use_source = True       # True if you want mass source into the domain
+use_sink = True       # True if you want mass sink out of the domain
 param_string = "\n================================================================"
 param_string += "\nuse_coriolis = {}\nuse_beta = {}".format(use_coriolis, use_beta)
 param_string += "\nuse_friction = {}\nuse_wind = {}".format(use_friction, use_wind)
@@ -256,18 +256,21 @@ while (time_step < max_time_step):
 # ============================= Main time loop done ================================
 print("Main computation loop done!\nExecution time: {:.2f} s".format(time.clock() - t_0))
 print("\nVisualizing results...")
+def Visualisation():
+    import viz_tools
+    # ==================================================================================
+    # ================== Visualizing results by call to external file ==================
+    # ==================================================================================
+    #viz_tools.pmesh_plot(X, Y, eta_n, "Final state of surface elevation $\eta$")
+    #viz_tools.quiver_plot(X, Y, u_n, v_n, "Final state of velocity field $\mathbf{u}(x,y)$")
+    #viz_tools.hovmuller_plot(x, t_sample, hm_sample)
+    #viz_tools.plot_time_series_and_ft(t_sample, ts_sample)
+    eta_anim = viz_tools.eta_animation(X, Y, eta_list, anim_interval*dt, "eta")
+    #eta_surf_anim = viz_tools.eta_animation3D(X, Y, eta_list, anim_interval*dt, "eta_surface")
+    quiv_anim = viz_tools.velocity_animation(X, Y, u_list, v_list, anim_interval*dt, "velocity")
+    # ============================ Done with visualization =============================
 
-# ==================================================================================
-# ================== Visualizing results by call to external file ==================
-# ==================================================================================
-#viz_tools.pmesh_plot(X, Y, eta_n, "Final state of surface elevation $\eta$")
-#viz_tools.quiver_plot(X, Y, u_n, v_n, "Final state of velocity field $\mathbf{u}(x,y)$")
-#viz_tools.hovmuller_plot(x, t_sample, hm_sample)
-#viz_tools.plot_time_series_and_ft(t_sample, ts_sample)
-eta_anim = viz_tools.eta_animation(X, Y, eta_list, anim_interval*dt, "eta")
-#eta_surf_anim = viz_tools.eta_animation3D(X, Y, eta_list, anim_interval*dt, "eta_surface")
-quiv_anim = viz_tools.velocity_animation(X, Y, u_list, v_list, anim_interval*dt, "velocity")
-# ============================ Done with visualization =============================
+    print("\nVisualization done!")
+    plt.show()
 
-print("\nVisualization done!")
-plt.show()
+#Visualisation()
